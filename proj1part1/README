@@ -1,0 +1,210 @@
+***************************************************************************
+***                      COMP 15  Proj1                                 ***
+***************************************************************************
+Revised by : Rui Qin
+Date: 9/30/2016
+
+
+                                                                                
+Purpose:
+		This project simulates the processing of a logistics cimpany including
+		fetching a order and pack a order.
+		It has three mode to operate, one is assign(deliver) the Order by item
+		number in the Packing Station, one is assign(deliver) the Order by total
+		time of the current Order in the Packing Station now and the last one 
+		is just deliver by sequence.
+		We need to decide which mode is the most time saved one with different 
+		Orders come in.
+		
+
+		
+Files:
+		Up till now, I get 3 header files and one cpp file created by myself.
+		
+		Orderqueue.h:
+					This is the header file for Orderqueue class.
+					General Guide:
+								This class is really important because it is the
+								place to save the Order in the queue and has a lot 
+								of operations within which can be used in other class
+								or functions easily to deal with the data in the queue
+
+
+					Relation with "PackStation" and initially data implementions:
+								At the beginning of the programm, the programm will read in 
+								data (Order: struct type), the Orderqueue is the place to 
+								save those initial generated data, which is easily operate due
+								to its other useful functions. Meawhile, it has relation with
+								PackStation class, which will also save the sorted Order in the 
+								queue.
+
+					Method behind:
+								The class here is to make a queue and to add data by "Enqueue"
+								and take out data by "Dequeue". The queue will also expand if 
+								running out of space. It has one more important function 
+								"traverse(int index)", which will return data saved in queue 
+								depending on the given index
+								
+		Orderqueue.cpp:
+					Orderqueue():  constructor
+					~Orderqueue(): desctructor
+					Orderqueue(int givenSpace): constructor with parameters which generate 
+                                      the queue with specific size
+	
+					bool isEmpty():  Decide whether the sequence is empty
+					bool isFull():   Decide whether the sequence is fulled
+					void clear():    Makes the current queue into a empty stack
+					int  size():     Return the size of the queue
+	
+					Order Dequeue():  Removes the first Order of the queue and 
+									  returns it back
+	
+					void Enqueue(Order Aorder): 
+					Takes an Order and puts it back of the queue
+	
+					Order* OrderQueue: 
+					the pointer points to the Order struct
+	
+					int num_struct: 
+					the total number of structs in the queue
+	
+					int capacity: 
+					the total size of the current Orderqueue
+	
+					int head: 
+					the index of struct that is the first moved into queue
+	
+					int tail: 
+					the index of struct that is the last moved into queue
+					
+					
+					void ensureCapacity():
+					make sure there is enough space for Order
+					
+					
+					Order traverse(int index):
+					give a index and return a Order type in the queue
+										
+					
+		PackStation.h
+					General Guide:
+					This PackStation is the place to pack all the 
+					Orders it is assigned.It has its own functions
+					to count the total time of the current Order and
+					the number of Order in the queue now.
+
+					Relation with "FetchStation":
+					There is a really important function 
+					AddOrder(Order Aorder), it relates to the "FetchStation" 
+					class which is the place to decide put Order in which 
+					stations depending different mode. The PackStation is 
+					the place to collect Order from upper level -- "FetchStation"
+					class.
+
+					The different PackStation receives different goods and
+					count the time and size, return back those imformation.
+
+					Include Orderqueue:
+					It contain other class "Orderqueue" as member because the
+					PackStation will also save Order in the queue in order to 
+					further use and operate with the Order in the queue
+					
+					public:
+	
+					PackStation(): constructor
+					~PackStation():destructor
+	
+	
+					int getTime():
+					The total time of order currentlly in the queue
+					int getItem():
+					The orders currentlly in the queue
+	
+					private:
+					
+					Orderqueue queueStation:
+					A new instance of Orderqueue class
+					
+					
+					int currentTime:
+					The total time of order currentlly in the queue
+					
+					int currentItem:
+					The orders currentlly in the queue
+					
+					int totalTime:
+					The total time of all orders being processed
+					
+					int totalItem:
+					The total items of all orders being processed
+					
+					void setTime(): 
+					The total time of finishing current saved Order
+					
+					void AddOrder(Order Aorder):
+					Enqueue a new Order into the queue
+					
+					void ReduceTime(int time_units):
+					The time when the Order is processing 
+					in the FetchStation
+					
+					
+					
+		FetchStation.h
+					General Guide:
+					This FetchStation class is the place to take in Order
+					from the queue which reads all the data from file and save
+					them in queue. The Processing function takes one Order each 
+					time, then collect the needed data -- time, finally decides
+					which PackStation the Order will go depending on which mode 
+					the user chooses
+
+					Relation with "PackStation":
+					The FetchStation is more like a upper level of PackStation,
+					FetchStation will decide which PackStation is the right place
+					to put the Order due to different mode. 
+
+					Method behind:
+					There are three different functions, each of which is the mode
+					given by the user. The pressing()
+					
+					
+					public:
+	
+					FetchStation():	Constructor
+					~FetchStation():Destructor	
+	
+					void Prcessing(Order Aorder):
+					The function takes in an Order each time and 
+					collect more data like pack_duration and fetch_duration
+					to do time operation
+					
+					void whichMode(string ModeName):
+					Easy function decides which mode will use depends on the
+					string given
+					
+					
+					
+					
+					private:
+					
+					int totalTime;  
+
+					void Mode_ITEMS(): FEWEST_ITEMS mode
+					void Mode_TIME():  SHORTEST_TIME
+					void Mode_ROBIN(): ROUND_ROBIN
+										
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+					
+		

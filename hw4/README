@@ -1,0 +1,390 @@
+***************************************************************************
+***                      COMP 15  Homework 4                            ***
+***************************************************************************
+Revised by : Rui Qin
+Date: 10/25/2016
+
+Purpose: 
+              This assignment will implement a binary tree to do an alphabetizer.
+              The tree will save all the words given by specific sequence 
+              according to their  ASCII character values. Also, there are two 
+              different mode. One is the "interactive" mode, in which you can
+              manually type in the words and specify the print order;and an 
+              "automated" mode, in which it will read a list of words from a 
+              file and print those words in a given order.
+             
+             
+Files:
+        StringBST.h:
+                General Guide:
+                This is the header file for StringBST, it is the place declares 
+                all the functions as well as some variables. Most of the 
+                functions defined in the assignment sheet are in the public 
+                phase because we will use them. However, most "helper 
+                functions" I create are in the private phase because they are 
+                used to help the original functions and all of the helper 
+                functions are operated recursively.
+                
+                Notice:(Specify some complex and hard functions and variables)
+                
+                
+                struct treeNode
+                {       The basic element as the function as leaf in the binary
+                        tree.
+                
+                        string word;  
+                        //The string saved
+                        int time;     
+                        //The number of this string saved
+                        treeNode *left,*right; 
+                        //The children of the node as left side
+                        //and the right side
+        
+                        treeNode(){ The constructor of the stuct initializes
+                                    the variabls in the struct
+                                time = 0; 
+                                //No string yet, so set to 0
+                                word = ""; 
+                                //No string yet, so set to empty string
+                                            left = NULL;
+                                //Initially set up the left treeNode to NULL
+                                      right = NULL;
+                                //Initially set up the right treeNode to NULL
+                        }
+                }
+                
+                
+                
+                treeNode* root;
+                //the pointer points to the first element
+                //of the tree ()
+                
+                
+                void clear_helper(treeNode* leaf);
+                //the recursive version to clear the tree used in
+                //function clear()
+                
+                //Notice:It kind of like a "postOrder-delete". It deletes
+                the treeNode as the sequence left->right->delete.The
+                reason that is operates in this sequence is that it
+                should go till the last node, and delete. Otherwise,
+                if the node is deleted, it will lose track of all the
+                nodes it points to
+                
+                int size_helper(treeNode* leaf);
+                //the recursive version to get how many elements
+                //currently in the tree for the function size()
+                
+                //Notice:This is the "preOrder-size", beacause it adds
+                //the number of time for each node as the sequence that
+                //first adds the parent's time and then go to the left 
+                //side using recursive function to count all the times
+                //on the left side and then go to the right side
+        
+                
+                void print_helper(treeNode* leaf);
+                //the recursive version to print out the data in 
+                //the tree for the function print()
+                
+                //Notice:This is the "inOrder-print", because it relates 
+                //to the method the string being saved:the left is smaller,
+                //the right is larger. The function then prints the string
+                //in the tree from the smallest to largest
+                
+                
+                void add_helper(string element, treeNode* leaf);
+                //recursive version to add an new element into the
+                //tree for function add(string element)
+                
+                //Notice:Three cases: First is the element might already there,
+                //then we just add 1 to the time; Second:the element is bigger 
+                //than the current string, then it should be turned into the 
+                //right side of the current node.If there is nothing there, 
+                //the new string then just lives there else if there is another
+                //string there, it runs the function again to recursively 
+                //assign this string. Third: the element is smaller than the 
+                //current string, then it should be turned into the left side,
+                //and runs the same algorithm
+                
+                
+                treeNode* remove_helper(string element, treeNode* leaf);
+                //the recursive version to take a target (string) as
+                //a parameter and returns a boolean. It will find the target 
+                //and then proceed to remove one instance of it from the tree
+                //for the function remove(string element)
+                
+                
+                string getMin_helper(treeNode* leaf);
+                //the recursive version to find out the smallest
+                //string in the tree for the function getMin()
+                
+                //Notice:Go to the smallest string in the tree which also
+                //the left-most string. So the function recursively run
+                //until it finds out the left-most string which does not
+                //have a left child
+        
+                
+                string getMax_helper(treeNode* leaf);
+                //the recursive version to find out the largest
+                //string in the tree for the function getMax()
+                
+                //Notice:Go to the largest string in the tree which also
+                //the right-most string. So the function recursively run
+                //until it finds out the right-most string which does not
+                //have a right child
+        
+                
+                void removeMin_helper(treeNode* leaf);
+                //using the function remove() and getMin()
+                //to help find the smallest string and remove it
+                
+                //Notice:It uses the funtion 
+                //"remove_helper(string element, treeNode* leaf)" and
+                //"getMin_helper(treeNode* leaf)" 
+                //It first finds out the smallest string in the tree and
+                //then remove the string with the function 
+                //"remove(string element)"
+                 
+                
+        
+                void removeMax_helper();
+                //the function remove() and getMax()
+                //to help find the largest string and remove it
+                
+                //Notice:It uses the funtion 
+                //"remove_helper(string element, treeNode* leaf)" and
+                //"getMax_helper(treeNode* leaf)" 
+                //It first finds out the largest string in the tree and
+                //then remove the string with the function 
+                //"remove(string element)"
+        
+                bool contains_helper(string element, treeNode* leaf);
+                //the recursive version to finds whether the target
+                //string is in the tree for the function 
+                //contains(string element)
+                
+                //Notice:There are three cases: First, when the current string 
+                //equals to the target one, then it is true. Second, if target 
+                //string is bigger, then it will go to the right side and run 
+                //the function again. Third, if target string is smaller, then 
+                //it will go to the left side and run the function again
+                
+                
+                
+        Alphabetizer.h:
+        Alphabetizer.cpp:
+                General Guide:
+                The interface here will declare a instance of the StringBST.cpp 
+                class. And it has two run mode. One is "interactive" mode, which 
+                is the constructor without any parametertake read in user's 
+                input. The other one is an constructor with two parameters, 
+                containing the filename and the mode, which will read strings 
+                in the text file and prints out the sorted strings.
+                
+                void print_inOrder();
+                //get min each time and prints out, then
+                //deletes it. Processing until the binary
+                //tree is empty
+                
+        
+                void print_reversedOrder();
+                //get max each time and prints out, then
+                //deletes it. Processing until the binary
+                //tree is empty
+        
+                void copy_strings_from(istream &infile);
+                //Copy each string of non-whitespace characters from the 
+                //given input stream onto standard output (cout), one string 
+                //per line.
+                
+                void run()
+                //read string from command lines one by one 
+                //as the user types, first the string for the mode, 
+                //second then all the strings needed to sort. Then, 
+                //print out the sorted strings in a format according 
+                //to the mode the requriments
+                
+                void run(string filename, string order);
+                //get the file name and using the stream to take them 
+                //out to save into the binary tree. Then prints them out
+                //as sorted according to the mode given and the format
+                
+                
+                
+                
+        BSTTesting.cpp:
+                General Guide:
+                This is the functions test the case for StringBST.cpp
+                It have two instances, one is declared with parameters
+                which directly makes up a binary tree.
+                The second one is declared without any parameters and 
+                test all the functions in the public in the StringBST.cpp
+                
+        AlphaTesting.cpp
+                General Guide:
+                One case, just running the function run(). And that is the
+                "interavtive" mode, which let the user give the mode and 
+                the strings
+                
+                The second case, I cout messages asking the mode name and 
+                filename from the user, and the
+                run(string filename, string order) will read the strings from 
+                the text and prints out the sorted strings
+                
+                
+        main.cpp
+                General Guide:
+                The functions here counts the number of inputs in the
+                command line and also some specific commands. If it
+                finds out that the inputs are 2 , it will run the 
+                "automated" mode. If the inputs are 0, then it will
+                run the "interactive" mode. If the inputs are wrong
+                or not obeys the rule, the programm will terminate
+                and give the messages about the error
+                
+                
+                
+                
+                
+        Compile and Run:
+                
+                FIRST
+                Compile:
+                
+                clang++ -std=c++11 -Wall -Wextra StringBST.cpp \
+                Alphabetizer.cpp main.cpp -o alphabetizer
+                //This is the final version to run the whole programm with
+                //main.cpp
+                
+                Run:
+                
+                Two ways to run:
+                
+                ./alphabetizer x1 x2
+                //Here is the mode that read text file and run
+                //x1 here is the mode name, "f" forward; "r" reversed
+                //x2 here is the file name, usually the .txt format
+                //Example: ./alphabetizer f text1.txt
+                
+                ./alphabetizer
+                //Here is the mode that read strings and mode from user
+                //The user then need to first give the mode: "f" or "r", 
+                //or the programm will terminate because of the error
+                
+                
+                SECOND
+                Compile:
+                
+                clang++ -std=c++11 -Wall -Wextra StringBST.cpp BSTTesting.cpp
+                //This is the programm runs the BSTTesting, which tests the
+                //StringBST.cpp
+                
+                Run:
+                
+                ./a.out
+                
+                THIRD
+                Compile:
+                
+                clang++ -std=c++11 -Wall -Wextra StringBST.cpp \
+                Alphabetizer.cpp AlphaTesting.cpp
+                //This is the programm runs the AlphaTesting.cpp, which tests 
+                //the Alphabetizer.cpp
+                
+                Run:
+                
+                ./a.out
+                
+                
+                
+         Data Structures and Algorithms£º
+                 For this assignment, we use the idea of binary tree, which is 
+                 linked list has two other pointers points to other two 
+                 different nodes which also connect to other nodes as well.
+                 It is much easier to select and find the target data and 
+                 imformation in logN steps, which is better than normal
+                 linked list, we can only linearly serach the data we want.
+                 
+                 Also, another big idea behind the programm is recursion. Which
+                 using the function in itself, makes the function much easier
+                 to write. One thing should notice is about when the node
+                 point to NULL, we should alsways return because that is 
+                 always the base case.
+                 
+                 add(string elemnt):For this function here, there are three 
+                 steps: First, if there is nothing in the tree, then just set 
+                 the string to the root: Second, if the string is equal to the
+                 current string, then just add the time. Third, if the string
+                 is smaller than the current one, then it will go left and 
+                 if the string is smaller than the current one, it will
+                 go right. The string will continue and process this algorithm 
+                 until it get to NULL, then it can just become the new node 
+                 there.
+                 In a word, if equal, plus time; if smaller of bigger, go left 
+                 or right; if get to NULL, make a new node
+                 
+                 remove(string element):For this function here, it will 
+                 encounter several situaltions. First, if the string is just
+                 a leaf has no child, then we just minus the time by 1 or just 
+                 delete the node. Second, If the node has one child on the left 
+                 or right,then the node will just minus the time by 1 or 
+                 replaced by the child.Third, if the node has two children, it
+                 can be replced by either the largest one on its left side or 
+                 the smallest one on its right side because the binary tree here
+                 obeys a rule that left is smaller and right is larger.  
+                 
+                 
+    
+         Test Explaination:
+                 There are two seperate functions I need to test.
+                 
+                 First of all: BSTTesting.cpp for StringBST.cpp
+                 First, there are two kinds of ways to initialize an
+                 instance of the class.One with parameters and the other
+                 without. 
+                 I then have two classes "BST1" and "BST2".
+                 I initialize "BST1" with the constructor with parameters, then
+                 there is an array of strings being put into the binary tree
+                 in "BST1".
+                 Then I have "BST2", which initially does not
+                 have anything. I test "print()", "size()" and "isEmpty", those
+                 three functions for the empty binary tree in "BST2".
+                 Then I ues "add()" function to add various strings into 
+                 the "BST2", then it has a lot of strings in it.Then I can test 
+                 all other funtions which operate with the binary trees with
+                 several strings.
+                 
+                 
+                 Second: AlphaTesting for Alphabetizer.cpp 
+                 There are two different run functions in the class.
+                 One is the "run()" whcih does not have any parameters. Then 
+                 it just ask for mode and strings from user, then it runs
+                 smoothly.
+                 
+                 The other one is "run(string filename, string order)",
+                 then I let the user gives the mode and filename. Then the 
+                 programm just runs.
+
+                
+                
+
+                
+
+
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+

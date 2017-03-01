@@ -1,0 +1,431 @@
+***************************************************************************
+***                      COMP 15  Proj1                                 ***
+***************************************************************************
+Revised by : Rui Qin
+Date: 9/30/2016
+
+
+                                                                                
+Purpose:
+       This project simulates the processing of a logistics company including
+       fetching a order and pack a order.
+       It has three mode to operate, one is assign(deliver) the Order by item
+       number in the Packing Station, one is assign(deliver) the Order by total
+       time of the current Order in the Packing Station now and the last one 
+       is just deliver by sequence.
+       We need to decide which mode is the most time saved one with different 
+       Orders come in.
+                
+
+                
+Files:
+      Up till now, I get 6 header files and 6 cpp file created by myself.
+                
+      This is the header file and class for Orderqueue:
+      Orderqueue.h:
+      Orderqueue.cpp:
+                                        
+                                        
+     General Guide:
+                  This class is really important because it is the
+                  place to save the Order in the queue and has a lot 
+                  of operations within which can be used in other class
+                  or functions easily to deal with the data in the queue
+
+
+        Relation with "PackStation" and initially data implementions:
+
+        At the beginning of the programm, the programm will read in 
+        data (Order: struct type), the Orderqueue is the place to 
+        save those initial generated data, which is easily operate due
+        to its other useful functions. Meawhile, it has relation with
+        PackStation class, which will also save the sorted Order in the 
+        queue.
+
+        Method behind:
+        The class here is to make a queue and to add data by "Enqueue"
+        and take out data by "Dequeue". The queue will also expand if 
+        running out of space. It has one more important function 
+        "traverse(int index)", which will return data saved in queue 
+        depending on the given index
+                                                                
+
+        Orderqueue():  constructor
+        ~Orderqueue(): desctructor
+        Orderqueue(int givenSpace): 
+        constructor with parameters which generate 
+        the queue with specific size
+        
+        bool isEmpty():  Decide whether the sequence is empty
+        bool isFull():   Decide whether the sequence is fulled
+        void clear():    Makes the current queue into a empty stack
+        int  size():     Return the size of the queue
+        
+        Order Dequeue():  Removes the first Order of the queue and 
+                          returns it back
+        
+        void Enqueue(Order Aorder): 
+        Takes an Order and puts it back of the queue
+        
+        Order* OrderQueue: 
+        the pointer points to the Order struct
+        
+        int num_struct: 
+        the total number of structs in the queue
+        
+        int capacity: 
+        the total size of the current Orderqueue
+        
+        int head: 
+        the index of struct that is the first moved into queue
+        
+        int tail: 
+        the index of struct that is the last moved into queue
+                                        
+                                        
+        void ensureCapacity():
+        make sure there is enough space for Order
+                                        
+                                        
+        Order traverse(int index):
+        give a index and return a Order type in the queue
+                                                                                
+                
+        This is the header file and class for PackStation:                        
+        PackStation.h
+        PackStation.cpp
+                                        
+        General Guide:
+        This PackStation is the place to pack all the 
+        Orders it is assigned.It has its own functions
+        to count the total time of the current Order and
+        the number of Order in the queue now.
+
+        Relation with "FetchStation":
+        There is a really important function 
+        AddOrder(Order Aorder), it relates to the "FetchStation" 
+        class which is the place to decide put Order in which 
+        stations depending different mode. The PackStation is 
+        the place to collect Order from upper level -- "FetchStation"
+        class.
+
+        The different PackStation receives different goods and
+        count the time and size, return back those imformation.
+
+        Include Orderqueue:
+        It contain other class "Orderqueue" as member because the
+        PackStation will also save Order in the queue in order to 
+        further use and operate with the Order in the queue
+
+
+        
+          public:
+        
+                PackStation(); // constructor
+                ~PackStation();// destructor
+        
+        
+                int getTime(); 
+                //The total time of order currentlly in the queue
+                int getItem();
+                // The number of orders currentlly in the queue
+                
+                void AddOrder(Order Aorder); 
+                // Enqueue a new Order into the queue
+                
+                void ReduceTime(int time_units); 
+                //The time when the Order is processing 
+                //in the FetchStation, because the PackStation
+                //will wait until the order is finished fetching
+                //and then can take it
+                  
+                
+          private:
+                Orderqueue queueStation; 
+                //A new instance of Orderqueue class
+                
+                
+                int currentTime;
+                // The total time of order currentlly in the queue
+                int currentItem;
+                // The orders currentlly in the queue
+                
+                int totalTime;  
+                // The total time of all orders being
+                // processed
+                
+                int totalItem; 
+                // The total items of all orders that in the queue
+        
+           
+             
+             
+             
+           
+                                        
+                                        
+         This is the header file and class for FetchStation:                
+         FetchStation.h
+         FetchStation.cpp
+                                        
+         General Guide:
+         This FetchStation class is the place to take in Order
+         from the queue which reads all the data from file and save
+         them in queue. The Processing function takes one Order each 
+         time, then collect the needed data -- time, finally decides
+         which PackStation the Order will go depending on which mode 
+         the user chooses
+
+         Relation with "PackStation":
+         The FetchStation is more like a upper level of PackStation,
+         FetchStation will decide which PackStation is the right place
+         to put the Order due to different mode. 
+
+         Include PackStation:
+         This class is the place to declare specific number of PackStation,
+         because FetchStation is the place to take in an order and will 
+         assign this order according to the mode. 
+                                        
+                                        
+                        
+
+
+    public:
+            
+            FetchStation();  // Constructor
+            ~FetchStation(); // Destructor        
+            
+            
+            void initialize(int Number);
+            //Take the given nuber which is 
+            //the number of Pack Station and initialize
+            //an array of packstation class
+     
+            Order Processing(Order Aorder,string ModeName,int arriveTime);
+            //The function takes in an Order each time and 
+            //collect more data like pack_duration and fetch_duration
+            //to do time operation
+            
+            
+            
+    private:
+            
+            PackStation* ps; //The pointer points to the PackStation
+            Order new_order; //The Order type varibal gets the order outside
+            
+            int Num_PS;        //The number of PackStation
+            int processedItem; //The item being processed in FetchStation
+            int FetchTime;     //The total time that orders already being 
+                               //fetch 
+            
+            void  Mode_ITEMS();
+            //This mode checks each pack station and
+            //find the one with least item and then add the 
+            //order to that pack station
+      
+            void  Mode_TIME() ; 
+            //This mode checks each pack station and
+            //find the one with least time and then add the 
+            //order to that pack station
+      
+            void  Mode_ROBIN(); 
+            //This mode add the order in sequence
+    
+            void whichMode(string ModeName);
+            //Easy function decides which mode will use depends on the
+            //string given
+    
+            void waitingFS(int arriveTime);
+            //Compare the arrive time with the total fetch time
+            //that all the orders before it, if arrive time is bigger, 
+            //the fetch station will wait until the order arrives. If 
+            //the total ferch time is bigger, the order will wait until
+            //all the orders are fetched
+            
+            int TimeCount();
+            //Count all the time including fetch duration, pack duration
+            //the time the order wait in the fetch station and pack station
+                                                                                
+                                                
+      
+      This is the header file and class for Operation:        
+      Operation.h
+      Operation.cpp
+
+      General Guide:
+      This Operation class is the place to 
+      First, read imformation from the text and save them into
+      a queue of orders
+      Second, read in the number of pack stations and the mode
+      the user wants to simulate
+      Third, declare a FetchStation class 
+      Fourth, collect and print out all the final results
+
+      Relation with "FetchStation":
+      This class is the place to declare and use the FetchStation class,
+      collect time and nearly the final place to run the whole programm
+      Relation with "test.cpp" 
+      The upper level of test.cpp. which nealy finishes all the pragramm
+
+      Include FetchStation
+      This class will declare a FetchStation class and save the imformation
+      read from .txt file and dequeue every time to give an order to 
+      FetchStation, which will then operate, collect time and assign it 
+      to different PackStation according to different mode.
+                                        
+        
+        
+      public:
+      
+             Operation(string filename,int size,string Name);
+             //Coustructor with parameters, which will initialize the
+             //mode and the number of pack station. Meanwhile, it will 
+             //also read in the string in the file and save all the 
+             //information into the Order struct
+              
+             void run();
+             //Get the size of the total order and 
+             //loop through many times to take out an order
+             //each time then deal with time and information
+             //the struct has, and finally print out all the
+             //information
+                      
+                      
+              
+              
+      private:
+              
+             Orderqueue AllOrder; 
+             //an Orderqueue class
+             int AllOrder_size = 0; 
+             //The size of the queue which contains all
+             //the orders read from the file
+              
+             int num_PS; 
+             //number of Packing Station given by the user
+             FetchStation FS; 
+             //A FetchStation class with the number of pack stations 
+             string ModeName;
+             //The mode name given by the user
+              
+             void printOut(Order order1);
+             //Take in a Order type and get all the time
+             //information it saves and print out//
+              
+             void printResult();
+             //print out the final result such as the
+             //min,max and mean time and the total number of 
+             //orders being processed
+              
+             int totalTime = 0;
+             //The total time
+             int min_elapsed_time = 2^15-1;
+             //The minimum time
+             //(A really big number initially to prevent the 
+             // number it compared with is bigger than this value)
+             int max_elapsed_time = -1;
+             //The maximum time
+             int mean_elapsed_time = 0 ;
+             //The mean time
+              
+             void min_result(Order Aorder);
+             //find out the minimum time of one order
+             void max_result(Order Aorder);
+             //find out the maximum time of one order
+             void total_result(Order Aorder);
+             //find out the total time of all orders
+             void result(Order Aorder);
+             //combine all the results above to get
+             //the result
+             
+       
+        
+      This is the cpp file for main function:
+      
+      test.cpp
+      
+      This is the main function, the place to read file and input
+      from user. Meanwhile, it just declares the operation class
+      which contains the .run function and will run the whole 
+      simulation 
+      
+       
+             
+                                                
+                   
+                   
+      This is the header file and class for Parser(file given):        
+      
+      Parser.h
+      Parser.cpp
+      
+      This is the file read imformation from .txt and save them 
+      into the Order.h
+      
+      
+      This is the header file for Order(file given):
+      
+       int id;                 /  the id for an order / 
+       int arrival_timestamp;  /* aka "arrival time" */
+       int fetch_duration;     /* aka "fetch time"   */
+       int pack_duration;      /* aka "pack time"    */
+       int fetch_time_left;
+       int pack_time_left;
+        
+       int FS_waitingTime; //The time the order waits in the FetchStation
+       int PS_waitingTime; //The time the order waits in the PackingStation
+       int total_time;     //The total time the order finish processing
+                                                
+                                                
+                      
+                      
+                      
+      Compile and Run:
+      
+      This is the way to compile it:      
+      
+      clang++ -std=c++11 -g -Wall -Wextra Orderqueue.cpp PackStation.cpp \
+          Parser.cpp test.cpp Operation.cpp FetchStation.cpp -o proj1
+
+      But I have a Makefile which contains command in it, just type:
+     
+      make
+      
+      And when you try to run the the programm, the 3 things: the text file, 
+      the number of PackStation and the mode:
+      
+      .txt : any text file
+      number: number of PackStation
+      mode:  FEWEST_ITEMS    ||    SHORTEST_TIME     ||      ROUND_ROBIN
+      
+      
+      ./proj1 NAME.txt NUMBER Mode ==> (EX:./proj1 random1.txt 4 FEWEST_ITEMS)
+
+
+
+
+
+      Data Structure:
+      First of all, the most important idea is about queue, we get a queue 
+      which contains the Order struct, and the queue here obeys the rule 
+      "FIFO", and it is really important for it save all the data and 
+      imformation we need.
+      
+      Second, the class obtains another class. It seems a upper level 
+      class obtains lower level class. And each class only takes care 
+      of the class it contains.
+      
+      Third, the assignment focus on the "passing", it is really 
+      importatnt to transfer the imformation, data, variable form upper
+      level to lower level, and transfer back. Also, we need to keep 
+      track of the variable and the difference between the local and global.
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                        
+                

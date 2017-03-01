@@ -1,0 +1,1 @@
+1 2 - p f TEXT2.txt  1 2 3 +  p 

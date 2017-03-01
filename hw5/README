@@ -1,0 +1,156 @@
+***************************************************************************
+***                      COMP 15  Homework 5                            ***
+***************************************************************************
+Revised by : Rui Qin
+Date: 10/30/2016
+
+Purpose:
+        The main idea for this assignment is sorting intergeers. Collecting
+        intergers from user or .txt file, and save them into vector. Then 
+        implementing 3 different and efficient methods to sort them in 
+        ascending order. Then there are also two ways to present the output:
+        one if just cout in the screen, the other is save all sorted intergers
+        in the file.
+        
+        
+        
+Files:
+        There are in total 3 files:
+        sortAlgs.cpp sortAlgs.h sorter.cpp
+        
+        Notice:
+        
+        sortAlgs.h: 
+        This header file declares all public and private functions
+        which will be implemeted in details in the .cpp file. 
+        the vector<int> vec is a variable which is the place to save
+        all the intergers, it also gets a lot of useful functions such as size()
+        ,push_back(int i),etc which makes the program really easy to imploy.
+        
+        sortAlgs.cpp:
+        There are 3 sorting method functions, are 3 different quick and 
+        efficient ways to sort the integers. 
+        
+        sorter.cpp:
+        This file contains the main function which will run the whole program.
+        It declares an instance of the sortAlg class and use two run functions
+        with different inputs. It also will give the wrong messages and 
+        terminate the programm when 
+        1. There are wrong number of inputs,not 2 or 3
+        2. The sorting mode is not "-s1","-s2","-s3" 
+        3. The way output being presented is not "--print" or "--save"
+        
+        Meanwhile there are two different
+        run functions, one of which takes two inputs as parameters and run
+        the "interactive" mode, the other one is run the "automated" mode.
+        Those are two ways to read in integers, one from user's cin, and the 
+        other is from .txt file
+        
+        
+        
+Compile and Run:
+
+Compile:
+
+        clang++ -std=c++11 -Wall -Wextra sortAlgs.cpp sorter.cpp -o sorter
+        
+        
+Run:
+
+        ./sorter sortAlg outputMode [fileName]
+        
+        //sortAlg: is the sorting mode, user can choose among "-s1","-s2","-s3"
+        
+        //outputMode:user can choose "--save" or "--print". "save" is to save 
+        //the output into another file, "--print" is to just cout the result in 
+        //the screen
+        
+        //fileName:user can give the .txt file which holds intergers. If user
+        //gives the filename, the program will then read integers from file.
+        //If the user not gives the filename, then the programm will ask 
+        //integers from user. ("fileName" is listed in square brackets because 
+        //it is an optional command line parameter: user does not type the 
+        //square brackets. )
+        
+        Example: ./sorter -s1 --print 
+                 ./sorter -s3 --save text1.txt
+        
+        
+        
+        
+        
+        
+Data Structures and Algorithms:
+
+The main algorithms we need to concern is three different soring methods:
+
+                              average               best                worst
+                                       
+Insertion Sort:
+asymptotic run time behaviour: O(n^2)                O(n)                O(n^2)
+                             
+
+shell Sort:
+asymptotic run time behaviour: O(n(log n)^2)         O(nlog n)     O(n(log n)^2)
+          
+          
+          
+quick Sort:
+asymptotic run time behaviour: nlog n                  nlog n              n^2
+
+
+
+
+
+
+
+Testing:
+
+I just test the cases which the user gives wrong inputs,then the program will
+terminate and prints out the wrong messages, abortion.
+I first declare an instance of the sortAlgs class called A1, then I start the 
+program with two different run functions which take different number of 
+inputs. According to the sorting mode, output mode and optional filename 
+given by the user, the program will operate differently.
+
+
+
+
+          
+          
+          
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+        
+        

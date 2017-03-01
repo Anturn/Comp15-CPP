@@ -1,0 +1,154 @@
+***************************************************************************
+***                      COMP 15  Proj2                                 ***
+***************************************************************************
+Revised by : Rui Qin
+Date: 11/13/2016
+
+Purpose:
+        The program will traverse a file tree created using a module.
+        It will need to index each file that it finds in the tree. 
+        After indexing all of the files it will enter a command loop
+        where the user can enter various commands to modify the search, 
+        and to quit the program.
+        
+        
+        
+Files:
+        In total, I have 5 files:
+        (hashTable.cpp  hashTable.h  Node.cpp Node.h main.cpp)
+        
+        hashTable.cpp & hashTable.h:
+        
+        In all, the class here is the place:
+        1.ask the command, query from the user
+        2.given a pointer points to a directory and save
+        all the files and directories into a tree
+        3.collect all the words from all available files
+        and save them into the array, which also will
+        call the "Node.cpp" to save them
+        4.Search for the target word through calling the
+        operation from "Node.cpp" class
+        5.Print out all the words that user asks
+        6.Repeating Query until user quits the programm
+        
+        Node.cpp & Node.h:
+        
+        This is the class saving all the contents and providing
+        some operations to traverse, find and print the strings
+        by using the linked list, which each node consists of 
+        the "data" struct
+        
+        main.cpp:
+        
+        This is the main function, which will run the programm
+        as a whole, it will collects the imput, the path, from 
+        the command line and call an instance of "FsTree" to 
+        save all the directories and files into as a tree and
+        then call an instance of "hashTable" and then use the
+        functions within then to run next. It will also give
+        error message and terminate the programm if given 
+        wrong number of imputs.
+        
+        
+        
+        
+Compile and Run:
+
+Compile:
+
+        clang++ -std=c++11 -Wall -Wextra DirNode.o FSTree.o hashTable.cpp main.cpp Node.cpp -o grep
+        
+        
+Run:
+
+        ./gerp DirectoryToIndex
+        
+        "DirectoryToIndex" determines which directory will be traversed and 
+        indexed.  You could use "/comp/15/files", for example.
+        
+        PS:
+        Then the programm will cout "Query", which asks for inputs such as:
+        
+        1. word 
+        (one single word you want to search)
+        Example: if
+                 name
+                 
+        2. @i word || @insensitive
+        (one single word and search for both original and insensitive words)
+        Example: @i kate
+                 @insensitive LOVe
+                 
+        3. @q || @quit
+        (quit the programm)
+        Example: @q
+                 @quit
+                 
+                 
+
+Architectural Overview:
+
+1.main.cpp obtains both an instance of "hashTable" class and "FSTree" class.
+It obtains "FSTree" class because it needs to save all the corresponding
+directories and files into the tree by the given parant directory name. Then 
+it will receive an pointer points to the root of the tree, in which we now have
+access to all the directories and files.
+It obtains "hashTable" class because all other operations are saved in that class
+such as query from user, collecting strings words from the files, searching and
+printing out all the found strings.
+
+2."hashTable" class obtains both an instance of "Node" and "FSTree" class.
+It ontains "Node" class because it will save all the strings into that class,
+which has an pointer points to a head of a linked list, easy to traverse all
+the data. 
+It obtains "FStree", because "FSTree" also obtains "DirNode" class, which has
+various operations about the diractories and files in the tree. So "hashTable"
+uses functions in "DirNode" class to find the path of each files and take out
+all the available files.
+
+
+Data Structures and Algorithms:
+
+The most important behind this project is using "hash table".
+I implement "hash table" to save all the words from each files,which are
+much easier to compare and search other than each time traverse each single
+file to look for the target string.
+Meawhile, my hash table is actually an array of classes, "Node" classes which
+get a head pointer points to a linked list to save all the words.
+My "Node" class obtains a struct which saves all needed imformation such as
+original word, lower case word, line number,etc. Those data structs are the
+ingredients for the linked list, for each node. There is also a vector in
+the struct which saves all the strings have same words but different path and
+line number.
+
+
+
+
+
+
+
+                 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
